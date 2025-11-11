@@ -25,11 +25,11 @@ model_with_tools = llm.bind_tools(tools)
 
 messages = [
     SystemMessage(content=SYSTEM_PROMPT),
-    HumanMessage(content="what is my current working directory")
+    HumanMessage(content="create a index.html and add a basic navbar init")
 ]
 
 response = model_with_tools.invoke(messages)
-print(response)
+print(response.tool_calls)
 
 if response.tool_calls:
     for tool_call in response.tool_calls:
