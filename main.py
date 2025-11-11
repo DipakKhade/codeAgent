@@ -8,6 +8,8 @@ from tools.create_file import create_file
 from tools.delete_file import delete_file
 from tools.read_file import read_file
 from tools.update_file import update_file
+from tools.exe_command import exe_command
+from tools.get_cwd import get_cwd
 
 load_dotenv()
 
@@ -23,7 +25,7 @@ model_with_tools = llm.bind_tools(tools)
 
 messages = [
     SystemMessage(content=SYSTEM_PROMPT),
-    HumanMessage(content="create a file index.html in the current directory and create a simple navbar in it")
+    HumanMessage(content="what is my current working directory")
 ]
 
 response = model_with_tools.invoke(messages)
@@ -38,9 +40,12 @@ if response.tool_calls:
             'create_file': create_file,
             'delete_file': delete_file,
             'read_file': read_file,
-            'update_file': update_file
+            'update_file': update_file,
+            'exe_command': exe_command,
+            'get_cwd': get_cwd
         }
         
         if tool_name in tool_map:
+            print(f'callling tool --{tool_name} with args --{tool_args}')
             result = tool_map[tool_name].invoke(tool_args)
             print(f"\nTool {tool_name} result:", result)
