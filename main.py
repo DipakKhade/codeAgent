@@ -17,19 +17,20 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-pro",
     temperature=1.0,
     max_retries=2,
-    google_api_key=os.getenv('GEMINI_API_KEY'),
+    google_api_key="AIzaSyCv0wqYNf-uTEmihkdmk2Ci3Mf-ss2CS5k" #os.getenv('GEMINI_API_KEY'),
 )
 
 tools = [create_file, delete_file, read_file, update_file]
 model_with_tools = llm.bind_tools(tools)
 
+user_input = input("give Task to Agent : ")
+
 messages = [
     SystemMessage(content=SYSTEM_PROMPT),
-    HumanMessage(content="create a index.html and add a basic navbar init")
+    HumanMessage(content= user_input)
 ]
 
 response = model_with_tools.invoke(messages)
-print(response.tool_calls)
 
 if response.tool_calls:
     for tool_call in response.tool_calls:
