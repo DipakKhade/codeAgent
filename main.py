@@ -17,7 +17,7 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-pro",
     temperature=1.0,
     max_retries=2,
-    google_api_key="AIzaSyCv0wqYNf-uTEmihkdmk2Ci3Mf-ss2CS5k" #os.getenv('GEMINI_API_KEY'),
+    google_api_key=os.getenv('GEMINI_API_KEY'),
 )
 
 tools = [create_file, delete_file, read_file, update_file]
