@@ -23,30 +23,34 @@ llm = ChatGoogleGenerativeAI(
 tools = [create_file, delete_file, read_file, update_file]
 model_with_tools = llm.bind_tools(tools)
 
-user_input = input("give Task to Agent : ")
 
-messages = [
-    SystemMessage(content=SYSTEM_PROMPT),
-    HumanMessage(content= user_input)
-]
+while True:
+    user_input = input("give Task to Agent : ")
 
-response = model_with_tools.invoke(messages)
+    messages = [
+        SystemMessage(content=SYSTEM_PROMPT),
+        HumanMessage(content= user_input)
+    ]
 
-if response.tool_calls:
-    for tool_call in response.tool_calls:
-        tool_name = tool_call['name']
-        tool_args = tool_call['args']
-        
-        tool_map = {
-            'create_file': create_file,
-            'delete_file': delete_file,
-            'read_file': read_file,
-            'update_file': update_file,
-            'exe_command': exe_command,
-            'get_cwd': get_cwd
-        }
-        
-        if tool_name in tool_map:
-            print(f'callling tool --{tool_name} with args --{tool_args}')
-            result = tool_map[tool_name].invoke(tool_args)
-            print(f"\nTool {tool_name} result:", result)
+    response = model_with_tools.invoke(messages)
+
+    print(response)
+
+    if response.tool_calls:
+        for tool_call in response.tool_calls:
+            tool_name = tool_call['name']
+            tool_args = tool_call['args']
+            
+            tool_map = {
+                'create_file': create_file,
+                'delete_file': delete_file,
+                'read_file': read_file,
+                'update_file': update_file,
+                'exe_command': exe_command,
+                'get_cwd': get_cwd
+            }
+            
+            if tool_name in tool_map:
+                print(f'callling tool --{tool_name} with args --{tool_args}')
+                result = tool_map[tool_name].invoke(tool_args)
+                print(f"\nTool {tool_name} result:", result)
